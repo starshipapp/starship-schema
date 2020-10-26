@@ -1,36 +1,39 @@
 # Users
 type User {
-  id: String!
+  id: ID!
   username: String!
   admin: Boolean!
   profilePicture: String!
   banned: Boolean!
   following: [String]
   createdAt: String!
+  verified: Boolean
+  featured: Boolean
+  partnered: Boolean
 }
 
 # Reports
 type Report {
-  id: String!
+  id: ID!
   owner: String!
   createdAt: String!
   objectType: Int!
-  objectId: String!
+  objectId: ID!
   reportType: Int!
   details: String
-  userID: String!
+  userId: ID!
   solved: Boolean!
 }
 
 # Planets
 type PlanetComponent {
-  name: String!
-  componentId: String!
+  name: ID!
+  componentId: ID!
   type: String!
 }
 
 type Planet {
-  id: String!
+  id: ID!
   name: String!
   createdAt: String!
   owner: String!
@@ -42,7 +45,7 @@ type Planet {
 
 # Invites
 type Invite {
-  id: String!
+  id: ID!
   planet: String!
   owner: String!
   createdAt: String!
@@ -52,21 +55,29 @@ type Invite {
 ### COMPONENTS
 ### ----------
 
-# Page
-
-type Page {
-  id: String!
+interface Component {
+  id: ID!
   createdAt: String!
   owner: String!
   updatedAt: String!
-  planet: String
+  planet: String!
+}
+
+# Page
+
+type Page implements Component {
+  id: ID!
+  createdAt: String!
+  owner: String!
+  updatedAt: String!
+  planet: String!
   content: String!
 }
 
 # Wiki (currently impl. as Page Group)
 
-type Wiki {
-  id: String!
+type Wiki implements Component {
+  id: ID!
   createdAt: String!
   owner: String!
   updatedAt: String!
@@ -74,7 +85,7 @@ type Wiki {
 }
 
 type WikiPage {
-  id: String!
+  id: ID!
   wiki: String!
   content: String!
   planet: String!
@@ -83,8 +94,8 @@ type WikiPage {
 
 # Files
 
-type Files {
-  id: String!
+type FileComponent implements Component {
+  id: ID!
   createdAt: String!
   owner: String!
   updatedAt: String!
@@ -92,14 +103,14 @@ type Files {
 }
 
 type FileObject {
-  id: String!
+  id: ID!
   path: [String!]!
   parent: String!
   name: String!
   planet: String!
   owner: String!
   createdAt: String!
-  componentId: String!
+  componentId: ID!
   type: String!
   fileType: String!
   finishedUploading: Boolean!
@@ -107,8 +118,8 @@ type FileObject {
 
 # Forum
 
-type Forum {
-  id: String!
+type Forum implements Component {
+  id: ID!
   createdAt: String!
   owner: String!
   updatedAt: String!
@@ -121,9 +132,9 @@ type ForumReaction {
 }
 
 type ForumPost {
-  id: String!
+  id: ID!
   name: String!
-  componentId: String!
+  componentId: ID!
   content: String!
   owner: String!
   planet: String!
@@ -136,9 +147,9 @@ type ForumPost {
 }
 
 type ForumReply {
-  id: String!
-  postId: String!
-  componentId: String!
+  id: ID!
+  postId: ID!
+  componentId: ID!
   content: String!
   owner: String!
   planet: String!
@@ -146,4 +157,90 @@ type ForumReply {
   sticked: Boolean!
   createdAt: String!
   updatedAt: String!
+}
+
+type Query {
+  # Users
+  user(id: ID!): User
+  adminUser(id: ID!): User
+  adminUsersRecent(id: ID!): [User]
+  currentUser: User
+  # Reports
+  report(id: ID!): Report
+  allReports: Report
+  reportsByUser(userId: ID!): [Report]
+  # Planets
+  memberPlanets: [Planet]
+  followedPlanets: [Planet]
+  featuredPlanets: [Planet]
+  planet(id: ID!): Planet
+  adminPlanets: [Planet]
+  planetFromInvite(inviteId: ID!): Planet
+  # Invites
+  invite(id: ID!): Invite
+  planetInvites(planetId: ID!): [Invite]
+  # Pages
+  page(id: ID!): Page
+  # Wiki
+  wiki(id: ID!): Wiki
+  wikiPage(id: ID!): WikiPage
+  wikiPages(wikiId: ID!): [WikiPage]
+  # Forum
+  forum(id: ID!): Forum
+  forumPost(id: ID!): ForumPost
+  forumPosts(forumId: ID!): [ForumPost]
+  forumReply(id: ID!): ForumReply
+  forumReplies(postId: ID!): [ForumReply]
+  # Files
+  fileComponent(id: ID!): FileComponent
+  files(componentId: ID!, parent: String!): [FileObject]
+  folders(componentId: ID!, parent: String!): [FileObject]
+  fileObject(Id: ID!): FileObject
+}
+
+type Mutation {
+  # Users
+  insertUser(email: String, password: String, username: String, recaptcha: String): User
+  banUser(userId: ID): User
+  resendVerificationEmail(username: String): User
+  resetPassword(username: String): User
+  # Reports
+  insertReport(objectType: Int, objectId: ID, reportType: Int, details: String, userId: ID): Report
+  solveReport(reportId: ID): Report
+  # Planets
+  insertPlanet(name: String): Planet
+  addComponent(planetId: ID, name: String, type: String): Planet
+  followPlanet(planetId: ID): Planet
+  removeComponent(planetId: ID, componentId: ID): Planet
+  updateName(planetId: ID, name: String): Planet
+  togglePrivate(planetId: ID): Planet
+  renameComponent(planetId: ID, name: String, componentId: ID): Planet
+  applyModTools(planetId: ID, featured: Boolean, verified: Boolean, partnered: Boolean, featuredDescription: String): Planet
+  toggleBan(planetId: ID, userId: ID): Planet
+  # Invites
+  insertInvite(planetId: ID): Invite
+  useInvite(inviteId: ID): Boolean
+  # Pages
+  updatePage(pageId: ID): Page
+  # Wikis
+  insertWikiPage(wikiId: ID, content: String, name: String): WikiPage
+  updateWikiPage(wikiId: ID, newContent: String): WikiPage
+  # Forums
+  createForumTag(forumId: ID, tag: String): Forum
+  removeForumTag(forumId: ID, tag: String): Forum
+  insertForumPost(forumId: ID, tag: String, name: String, content: String): ForumPost
+  updateForumPost(postId: ID, content: String): ForumPost
+  deleteForumPost(postId: ID): Boolean
+  lockForumPost(postId: ID): ForumPost
+  stickyForumPost(postId: ID): ForumPost
+  forumPostReact(postId: ID, id: ID): ForumPost
+  insertForumReply(forumId: ID, tag: String, name: String, content: String): ForumReply
+  updateForumReply(replyId: ID, content: String): ForumReply
+  deleteForumReply(replyId: ID): Boolean
+  forumReplyReact(replyId: ID, id: ID): ForumReply
+  # Files
+  createFolder(componentId: ID, parent: String, name: String): FileObject
+  completeUpload(objectId: ID): FileObject
+  renameObject(objectId: ID, name: String): FileObject
+  moveObject(objectId: ID, parent: String): FileObject
 }
