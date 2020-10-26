@@ -2,9 +2,9 @@
 type User {
   id: ID!
   username: String!
-  admin: Boolean!
-  profilePicture: String!
-  banned: Boolean!
+  admin: Boolean
+  profilePicture: String
+  banned: Boolean
   following: [String]
   createdAt: String!
 }
@@ -161,6 +161,14 @@ type ForumReply {
   updatedAt: String!
 }
 
+### -----------------
+### PURE RETURN TYPES
+### -----------------
+
+type LoginPayload {
+  token: String!
+}
+
 type Query {
   # Users
   user(id: ID!): User
@@ -206,6 +214,7 @@ type Mutation {
   banUser(userId: ID): User
   resendVerificationEmail(username: String): User
   resetPassword(username: String): User
+  loginUser(username: String, password: String): LoginPayload!
   # Reports
   insertReport(objectType: Int, objectId: ID, reportType: Int, details: String, userId: ID): Report
   solveReport(reportId: ID): Report
@@ -245,4 +254,12 @@ type Mutation {
   completeUpload(objectId: ID): FileObject
   renameObject(objectId: ID, name: String): FileObject
   moveObject(objectId: ID, parent: String): FileObject
+  # AWS
+  uploadFileObject(folderId: ID, type: String, name: String, filesId: String): String
+  downloadFileObject(fileId: ID): String
+  downloadFolderObject(folderId: ID): [String]
+  getObjectPreview(fileId: ID): String
+  deleteFileObject(objectId: ID): Boolean
+  getProfileUpload(mimeType: String, size: Int): String
+  getMarkdownImageUpload(mimeType: String, size: Int): String
 }
