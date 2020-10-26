@@ -1,0 +1,149 @@
+# Users
+type User {
+  id: String!
+  username: String!
+  admin: Boolean!
+  profilePicture: String!
+  banned: Boolean!
+  following: [String]
+  createdAt: String!
+}
+
+# Reports
+type Report {
+  id: String!
+  owner: String!
+  createdAt: String!
+  objectType: Int!
+  objectId: String!
+  reportType: Int!
+  details: String
+  userID: String!
+  solved: Boolean!
+}
+
+# Planets
+type PlanetComponent {
+  name: String!
+  componentId: String!
+  type: String!
+}
+
+type Planet {
+  id: String!
+  name: String!
+  createdAt: String!
+  owner: String!
+  private: Boolean!
+  followerCount: Int!
+  components: [PlanetComponent]!
+  homeComponent: PlanetComponent
+}
+
+# Invites
+type Invite {
+  id: String!
+  planet: String!
+  owner: String!
+  createdAt: String!
+}
+
+### ----------
+### COMPONENTS
+### ----------
+
+# Page
+
+type Page {
+  id: String!
+  createdAt: String!
+  owner: String!
+  updatedAt: String!
+  planet: String
+  content: String!
+}
+
+# Wiki (currently impl. as Page Group)
+
+type Wiki {
+  id: String!
+  createdAt: String!
+  owner: String!
+  updatedAt: String!
+  planet: String!
+}
+
+type WikiPage {
+  id: String!
+  wiki: String!
+  content: String!
+  planet: String!
+  createdAt: String!
+}
+
+# Files
+
+type Files {
+  id: String!
+  createdAt: String!
+  owner: String!
+  updatedAt: String!
+  planet: String!
+}
+
+type FileObject {
+  id: String!
+  path: [String!]!
+  parent: String!
+  name: String!
+  planet: String!
+  owner: String!
+  createdAt: String!
+  componentId: String!
+  type: String!
+  fileType: String!
+  finishedUploading: Boolean!
+}
+
+# Forum
+
+type Forum {
+  id: String!
+  createdAt: String!
+  owner: String!
+  updatedAt: String!
+  planet: String!
+}
+
+type ForumReaction {
+  emoji: String!
+  reactors: [String!]!
+}
+
+type ForumPost {
+  id: String!
+  name: String!
+  componentId: String!
+  content: String!
+  owner: String!
+  planet: String!
+  tags: [String]!
+  reactions: [ForumReaction]!
+  replyCount: Int!
+  sticked: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ForumReply {
+  id: String!
+  postId: String!
+  componentId: String!
+  content: String!
+  owner: String!
+  planet: String!
+  reactions: [ForumReaction]!
+  sticked: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
