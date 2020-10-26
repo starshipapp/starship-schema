@@ -7,9 +7,6 @@ type User {
   banned: Boolean!
   following: [String]
   createdAt: String!
-  verified: Boolean
-  featured: Boolean
-  partnered: Boolean
 }
 
 # Reports
@@ -41,6 +38,10 @@ type Planet {
   followerCount: Int!
   components: [PlanetComponent]!
   homeComponent: PlanetComponent
+  featured: Boolean
+  verified: Boolean
+  partnered: Boolean
+  featuredDescription: String
 }
 
 # Invites
@@ -86,7 +87,7 @@ type Wiki implements Component {
 
 type WikiPage {
   id: ID!
-  wiki: String!
+  wikiId: String!
   content: String!
   planet: String!
   createdAt: String!
@@ -109,11 +110,11 @@ type FileObject {
   name: String!
   planet: String!
   owner: String!
-  createdAt: String!
+  createdAt: String
   componentId: ID!
   type: String!
   fileType: String!
-  finishedUploading: Boolean!
+  finishedUploading: Boolean
 }
 
 # Forum
@@ -141,7 +142,8 @@ type ForumPost {
   tags: [String]!
   reactions: [ForumReaction]!
   replyCount: Int!
-  sticked: Boolean!
+  stickied: Boolean!
+  locked: Boolean!
   createdAt: String!
   updatedAt: String!
 }
@@ -154,7 +156,7 @@ type ForumReply {
   owner: String!
   planet: String!
   reactions: [ForumReaction]!
-  sticked: Boolean!
+  stickied: Boolean!
   createdAt: String!
   updatedAt: String!
 }
