@@ -16,7 +16,7 @@ type Report {
   createdAt: String!
   objectType: Int!
   objectId: ID!
-  reportType: Int!
+  reportType: Int
   details: String
   userId: ID!
   solved: Boolean!
@@ -177,8 +177,8 @@ type Query {
   currentUser: User
   # Reports
   report(id: ID!): Report
-  allReports: Report
-  reportsByUser(userId: ID!): [Report]
+  allReports(startNumber: Int!, count: Int!): [Report]!
+  reportsByUser(userId: ID!, startNumber: Int!, count: Int!): [Report]!
   # Planets
   memberPlanets: [Planet]
   followedPlanets: [Planet]
@@ -205,61 +205,61 @@ type Query {
   fileComponent(id: ID!): FileComponent
   files(componentId: ID!, parent: String!): [FileObject]
   folders(componentId: ID!, parent: String!): [FileObject]
-  fileObject(Id: ID!): FileObject
+  fileObject(id: ID!): FileObject
 }
 
 type Mutation {
   # Users
-  insertUser(email: String, password: String, username: String, recaptcha: String): User
-  banUser(userId: ID): User
-  resendVerificationEmail(username: String): User
+  insertUser(email: String!, password: String!, username: String!, recaptcha: String!): User
+  banUser(userId: ID!): User
+  resendVerificationEmail(username: String!): User
   resetPassword(username: String): User
   loginUser(username: String, password: String): LoginPayload!
   # Reports
-  insertReport(objectType: Int, objectId: ID, reportType: Int, details: String, userId: ID): Report
-  solveReport(reportId: ID): Report
+  insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
+  solveReport(reportId: ID!): Report
   # Planets
   insertPlanet(name: String): Planet
-  addComponent(planetId: ID, name: String, type: String): Planet
-  followPlanet(planetId: ID): Planet
-  removeComponent(planetId: ID, componentId: ID): Planet
-  updateName(planetId: ID, name: String): Planet
-  togglePrivate(planetId: ID): Planet
-  renameComponent(planetId: ID, name: String, componentId: ID): Planet
-  applyModTools(planetId: ID, featured: Boolean, verified: Boolean, partnered: Boolean, featuredDescription: String): Planet
-  toggleBan(planetId: ID, userId: ID): Planet
+  addComponent(planetId: ID!, name: String!, type: String!): Planet
+  followPlanet(planetId: ID!): Planet
+  removeComponent(planetId: ID!, componentId: ID!): Planet
+  updateName(planetId: ID!, name: String!): Planet
+  togglePrivate(planetId: ID!): Planet
+  renameComponent(planetId: ID!, name: String!, componentId: ID!): Planet
+  applyModTools(planetId: ID!, featured: Boolean!, verified: Boolean!, partnered: Boolean!, featuredDescription: String!): Planet
+  toggleBan(planetId: ID!, userId: ID!): Planet
   # Invites
-  insertInvite(planetId: ID): Invite
-  useInvite(inviteId: ID): Boolean
+  insertInvite(planetId: ID!): Invite
+  useInvite(inviteId: ID!): Boolean
   # Pages
-  updatePage(pageId: ID): Page
+  updatePage(pageId: ID!): Page
   # Wikis
-  insertWikiPage(wikiId: ID, content: String, name: String): WikiPage
-  updateWikiPage(wikiId: ID, newContent: String): WikiPage
+  insertWikiPage(wikiId: ID!, content: String!, name: String!): WikiPage
+  updateWikiPage(wikiId: ID!, newContent: String!): WikiPage
   # Forums
-  createForumTag(forumId: ID, tag: String): Forum
-  removeForumTag(forumId: ID, tag: String): Forum
-  insertForumPost(forumId: ID, tag: String, name: String, content: String): ForumPost
-  updateForumPost(postId: ID, content: String): ForumPost
-  deleteForumPost(postId: ID): Boolean
-  lockForumPost(postId: ID): ForumPost
-  stickyForumPost(postId: ID): ForumPost
-  forumPostReact(postId: ID, id: ID): ForumPost
-  insertForumReply(forumId: ID, tag: String, name: String, content: String): ForumReply
-  updateForumReply(replyId: ID, content: String): ForumReply
-  deleteForumReply(replyId: ID): Boolean
-  forumReplyReact(replyId: ID, id: ID): ForumReply
+  createForumTag(forumId: ID!, tag: String!): Forum
+  removeForumTag(forumId: ID!, tag: String!): Forum
+  insertForumPost(forumId: ID!, tag: String!, name: String!, content: String!): ForumPost
+  updateForumPost(postId: ID!, content: String!): ForumPost
+  deleteForumPost(postId: ID!): Boolean
+  lockForumPost(postId: ID!): ForumPost
+  stickyForumPost(postId: ID!): ForumPost
+  forumPostReact(postId: ID!, emojiId: String): ForumPost
+  insertForumReply(forumId: ID!, tag: String!, name: String!, content: String!): ForumReply
+  updateForumReply(replyId: ID!, content: String!): ForumReply
+  deleteForumReply(replyId: ID!): Boolean
+  forumReplyReact(replyId: ID!, id: ID!): ForumReply
   # Files
-  createFolder(componentId: ID, parent: String, name: String): FileObject
-  completeUpload(objectId: ID): FileObject
-  renameObject(objectId: ID, name: String): FileObject
-  moveObject(objectId: ID, parent: String): FileObject
+  createFolder(componentId: ID!, parent: String!, name: String!): FileObject
+  completeUpload(objectId: ID!): FileObject
+  renameObject(objectId: ID!, name: String!): FileObject
+  moveObject(objectId: ID!, parent: String!): FileObject
   # AWS
-  uploadFileObject(folderId: ID, type: String, name: String, filesId: String): String
-  downloadFileObject(fileId: ID): String
-  downloadFolderObject(folderId: ID): [String]
-  getObjectPreview(fileId: ID): String
-  deleteFileObject(objectId: ID): Boolean
-  getProfileUpload(mimeType: String, size: Int): String
-  getMarkdownImageUpload(mimeType: String, size: Int): String
+  uploadFileObject(folderId: ID!, type: String!, name: String!, filesId: String!): String
+  downloadFileObject(fileId: ID!): String
+  downloadFolderObject(folderId: ID!): [String]
+  getObjectPreview(fileId: ID!): String
+  deleteFileObject(objectId: ID!): Boolean
+  getProfileUpload(mimeType: String!, size: Int!): String
+  getMarkdownImageUpload(mimeType: String!, size: Int!): String
 }
