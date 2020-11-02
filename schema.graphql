@@ -169,6 +169,10 @@ type LoginPayload {
   token: String!
 }
 
+### -------------
+### FUNCTIONALITY
+### -------------
+
 type Query {
   # Users
   user(id: ID!): User
@@ -184,7 +188,7 @@ type Query {
   followedPlanets: [Planet]
   featuredPlanets: [Planet]
   planet(id: ID!): Planet
-  adminPlanets: [Planet]
+  adminPlanets(startNumber: Int!, count: Int!): [Planet]
   planetFromInvite(inviteId: ID!): Planet
   # Invites
   invite(id: ID!): Invite
@@ -214,12 +218,12 @@ type Mutation {
   banUser(userId: ID!): User
   resendVerificationEmail(username: String!): User
   resetPassword(username: String): User
-  loginUser(username: String, password: String): LoginPayload!
+  loginUser(username: String!, password: String!): LoginPayload!
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
   # Planets
-  insertPlanet(name: String): Planet
+  insertPlanet(name: String!): Planet
   addComponent(planetId: ID!, name: String!, type: String!): Planet
   followPlanet(planetId: ID!): Planet
   removeComponent(planetId: ID!, componentId: ID!): Planet
