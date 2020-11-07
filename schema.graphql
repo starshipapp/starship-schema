@@ -5,20 +5,21 @@ type User {
   admin: Boolean
   profilePicture: String
   banned: Boolean
-  following: [String]
+  following: [Planet]
+  memberOf: [Planet]
   createdAt: String!
 }
 
 # Reports
 type Report {
   id: ID!
-  owner: String!
+  owner: User!
   createdAt: String!
   objectType: Int!
   objectId: ID!
   reportType: Int
   details: String
-  userId: ID!
+  user: User!
   solved: Boolean!
 }
 
@@ -33,7 +34,7 @@ type Planet {
   id: ID!
   name: String!
   createdAt: String!
-  owner: String!
+  owner: User!
   private: Boolean!
   followerCount: Int!
   components: [PlanetComponent]!
@@ -41,14 +42,16 @@ type Planet {
   featured: Boolean
   verified: Boolean
   partnered: Boolean
+  members: [User]
   featuredDescription: String
+  invites: [Invite]
 }
 
 # Invites
 type Invite {
   id: ID!
-  planet: String!
-  owner: String!
+  planet: Planet!
+  owner: User!
   createdAt: String!
 }
 
@@ -59,9 +62,9 @@ type Invite {
 interface Component {
   id: ID!
   createdAt: String!
-  owner: String!
+  owner: User!
   updatedAt: String!
-  planet: String!
+  planet: Planet!
 }
 
 # Page
@@ -69,9 +72,9 @@ interface Component {
 type Page implements Component {
   id: ID!
   createdAt: String!
-  owner: String!
+  owner: User!
   updatedAt: String!
-  planet: String!
+  planet: Planet!
   content: String!
 }
 
@@ -80,16 +83,17 @@ type Page implements Component {
 type Wiki implements Component {
   id: ID!
   createdAt: String!
-  owner: String!
+  owner: User!
   updatedAt: String!
-  planet: String!
+  planet: Planet!
+  pages: [WikiPage]
 }
 
 type WikiPage {
   id: ID!
-  wikiId: String!
+  wiki: Wiki!
   content: String!
-  planet: String!
+  planet: Planet!
   createdAt: String!
 }
 
@@ -98,20 +102,20 @@ type WikiPage {
 type FileComponent implements Component {
   id: ID!
   createdAt: String!
-  owner: String!
+  owner: User!
   updatedAt: String!
-  planet: String!
+  planet: Planet!
 }
 
 type FileObject {
   id: ID!
   path: [String!]!
-  parent: String!
+  parent: FileObject!
   name: String!
-  planet: String!
-  owner: String!
+  planet: Planet!
+  owner: User!
   createdAt: String
-  componentId: ID!
+  component: FileComponent!
   type: String!
   fileType: String!
   finishedUploading: Boolean
@@ -122,9 +126,10 @@ type FileObject {
 type Forum implements Component {
   id: ID!
   createdAt: String!
-  owner: String!
+  owner: User!
   updatedAt: String!
-  planet: String!
+  planet: Planet!
+  posts: [ForumPost]
 }
 
 type ForumReaction {
@@ -135,10 +140,10 @@ type ForumReaction {
 type ForumPost {
   id: ID!
   name: String!
-  componentId: ID!
+  component: Forum!
   content: String!
-  owner: String!
-  planet: String!
+  owner: User!
+  planet: Planet!
   tags: [String]!
   reactions: [ForumReaction]!
   replyCount: Int!
@@ -146,15 +151,16 @@ type ForumPost {
   locked: Boolean!
   createdAt: String!
   updatedAt: String!
+  replies: [ForumReply]
 }
 
 type ForumReply {
   id: ID!
-  postId: ID!
-  componentId: ID!
+  post: ForumPost!
+  component: Forum!
   content: String!
-  owner: String!
-  planet: String!
+  owner: User!
+  planet: Planet!
   reactions: [ForumReaction]!
   stickied: Boolean!
   createdAt: String!
@@ -184,27 +190,20 @@ type Query {
   allReports(startNumber: Int!, count: Int!): [Report]!
   reportsByUser(userId: ID!, startNumber: Int!, count: Int!): [Report]!
   # Planets
-  memberPlanets: [Planet]
-  followedPlanets: [Planet]
   featuredPlanets: [Planet]
   planet(id: ID!): Planet
   adminPlanets(startNumber: Int!, count: Int!): [Planet]
-  planetFromInvite(inviteId: ID!): Planet
   # Invites
   invite(id: ID!): Invite
-  planetInvites(planetId: ID!): [Invite]
   # Pages
   page(id: ID!): Page
   # Wiki
   wiki(id: ID!): Wiki
   wikiPage(id: ID!): WikiPage
-  wikiPages(wikiId: ID!): [WikiPage]
   # Forum
   forum(id: ID!): Forum
   forumPost(id: ID!): ForumPost
-  forumPosts(forumId: ID!): [ForumPost]
   forumReply(id: ID!): ForumReply
-  forumReplies(postId: ID!): [ForumReply]
   # Files
   fileComponent(id: ID!): FileComponent
   files(componentId: ID!, parent: String!): [FileObject]
