@@ -235,7 +235,7 @@ type Mutation {
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Boolean
   # Pages
-  updatePage(pageId: ID!): Page
+  updatePage(pageId: ID!, content: String!): Page
   # Wikis
   insertWikiPage(wikiId: ID!, content: String!, name: String!): WikiPage
   updateWikiPage(wikiId: ID!, newContent: String!): WikiPage
