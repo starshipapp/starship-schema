@@ -45,6 +45,7 @@ type Planet {
   members: [User]
   featuredDescription: String
   invites: [Invite]
+  banned: [User]
 }
 
 # Invites
