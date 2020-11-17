@@ -223,7 +223,7 @@ type Mutation {
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
   # Planets
-  insertPlanet(name: String!): Planet
+  insertPlanet(name: String!, private: Boolean!): Planet
   addComponent(planetId: ID!, name: String!, type: String!): Planet
   followPlanet(planetId: ID!): Planet
   removeComponent(planetId: ID!, componentId: ID!): Planet
