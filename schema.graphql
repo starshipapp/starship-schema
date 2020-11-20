@@ -46,6 +46,7 @@ type Planet {
   featuredDescription: String
   invites: [Invite]
   banned: [User]
+  css: String
 }
 
 # Invites
@@ -232,6 +233,7 @@ type Mutation {
   renameComponent(planetId: ID!, name: String!, componentId: ID!): Planet
   applyModTools(planetId: ID!, featured: Boolean!, verified: Boolean!, partnered: Boolean!, featuredDescription: String!): Planet
   toggleBan(planetId: ID!, userId: ID!): Planet
+  setCSS(planetId: ID!, css: String!): Planet
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Boolean
