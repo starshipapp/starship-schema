@@ -236,7 +236,7 @@ type Mutation {
   setCSS(planetId: ID!, css: String!): Planet
   # Invites
   insertInvite(planetId: ID!): Invite
-  useInvite(inviteId: ID!): Boolean
+  useInvite(inviteId: ID!): Planet
   # Pages
   updatePage(pageId: ID!, content: String!): Page
   # Wikis
