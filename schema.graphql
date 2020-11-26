@@ -230,6 +230,7 @@ type Mutation {
   removeComponent(planetId: ID!, componentId: ID!): Planet
   updateName(planetId: ID!, name: String!): Planet
   togglePrivate(planetId: ID!): Planet
+  removeMember(planetId: ID!, userId: ID!): Planet
   renameComponent(planetId: ID!, name: String!, componentId: ID!): Planet
   applyModTools(planetId: ID!, featured: Boolean!, verified: Boolean!, partnered: Boolean!, featuredDescription: String!): Planet
   toggleBan(planetId: ID!, userId: ID!): Planet
@@ -237,11 +238,14 @@ type Mutation {
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Planet
+  removeInvite(inviteId: ID!): Planet
   # Pages
   updatePage(pageId: ID!, content: String!): Page
   # Wikis
   insertWikiPage(wikiId: ID!, content: String!, name: String!): WikiPage
-  updateWikiPage(wikiId: ID!, newContent: String!): WikiPage
+  updateWikiPage(pageId: ID!, newContent: String!): WikiPage
+  removeWikiPage(pageId: ID!): Wiki
+  renameWikiPage(pageId: ID!, newName: String!): WikiPage
   # Forums
   createForumTag(forumId: ID!, tag: String!): Forum
   removeForumTag(forumId: ID!, tag: String!): Forum
