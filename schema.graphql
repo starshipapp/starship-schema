@@ -96,7 +96,7 @@ type WikiPage {
   wiki: Wiki!
   content: String
   planet: Planet!
-  createdAt: String!,
+  createdAt: String!
   name: String!
 }
 
