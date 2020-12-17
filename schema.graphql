@@ -132,7 +132,8 @@ type Forum implements Component {
   owner: User!
   updatedAt: String!
   planet: Planet!
-  posts: [ForumPost]
+  posts(limit: Int, cursor: String, sortMethod: String): ForumPostFeed,
+  tags: [String]
 }
 
 type ForumReaction {
@@ -168,6 +169,15 @@ type ForumReply {
   stickied: Boolean!
   createdAt: String!
   updatedAt: String!
+}
+
+### ----------
+### FEED TYPES
+### ----------
+
+type ForumPostFeed {
+  cursor: String!,
+  forumPost: [ForumPost]
 }
 
 ### -----------------
