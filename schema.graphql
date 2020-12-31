@@ -177,7 +177,7 @@ type ForumReply {
 
 type ForumPostFeed {
   cursor: String!,
-  forumPost: [ForumPost]
+  forumPosts: [ForumPost]
 }
 
 ### -----------------
@@ -260,7 +260,7 @@ type Mutation {
   # Forums
   createForumTag(forumId: ID!, tag: String!): Forum
   removeForumTag(forumId: ID!, tag: String!): Forum
-  insertForumPost(forumId: ID!, tag: String!, name: String!, content: String!): ForumPost
+  insertForumPost(forumId: ID!, name: String!, content: String!, tag: String): ForumPost
   updateForumPost(postId: ID!, content: String!): ForumPost
   deleteForumPost(postId: ID!): Boolean
   lockForumPost(postId: ID!): ForumPost
