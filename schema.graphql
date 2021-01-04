@@ -1,4 +1,4 @@
-# starship-schema 0.3c
+# starship-schema 0.3d
 
 # Users
 type User {
@@ -115,7 +115,7 @@ type FileComponent implements Component {
 type FileObject {
   id: ID!
   path: [String!]!
-  parent: FileObject!
+  parent: FileObject
   name: String!
   planet: Planet!
   owner: User!
@@ -283,6 +283,9 @@ type Mutation {
   renameObject(objectId: ID!, name: String!): FileObject
   moveObject(objectId: ID!, parent: String!): FileObject
   # AWS
+  # While many of these methods *could be* included in the
+  # initial object query, because they expire it's better
+  # to fetch this information as needed
   uploadFileObject(folderId: ID!, type: String!, name: String!, filesId: String!): String
   downloadFileObject(fileId: ID!): String
   downloadFolderObject(folderId: ID!): [String]
