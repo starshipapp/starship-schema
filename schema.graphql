@@ -1,3 +1,5 @@
+# starship-schema 0.3c
+
 # Users
 type User {
   id: ID!
@@ -155,7 +157,7 @@ type ForumPost {
   locked: Boolean!
   createdAt: String!
   updatedAt: String!
-  replies: [ForumReply]
+  replies(limit: Int, cursor: String): ForumReplyFeed
 }
 
 type ForumReply {
@@ -178,6 +180,11 @@ type ForumReply {
 type ForumPostFeed {
   cursor: String!,
   forumPosts: [ForumPost]
+}
+
+type ForumReplyFeed {
+  cursor: String!,
+  forumReplies: [ForumReply]
 }
 
 ### -----------------
@@ -266,7 +273,7 @@ type Mutation {
   lockForumPost(postId: ID!): ForumPost
   stickyForumPost(postId: ID!): ForumPost
   forumPostReact(postId: ID!, emojiId: String): ForumPost
-  insertForumReply(forumId: ID!, tag: String!, name: String!, content: String!): ForumReply
+  insertForumReply(postId: ID!, content: String!): ForumReply
   updateForumReply(replyId: ID!, content: String!): ForumReply
   deleteForumReply(replyId: ID!): Boolean
   forumReplyReact(replyId: ID!, id: ID!): ForumReply
