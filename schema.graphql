@@ -1,4 +1,4 @@
-# starship-schema 0.3e
+# starship-schema 0.3f
 
 # Users
 type User {
@@ -195,6 +195,11 @@ type LoginPayload {
   token: String!
 }
 
+type UploadFileData {
+  documentId: String!
+  uploadUrl: String!
+}
+
 ### -------------
 ### FUNCTIONALITY
 ### -------------
@@ -290,8 +295,6 @@ type Mutation {
   renameObject(objectId: ID!, name: String!): FileObject
   moveObject(objectId: ID!, parent: String!): FileObject
   # AWS
-  uploadFileObject(folderId: ID!, type: String!, name: String!, filesId: String!): String
+  uploadFileObject(folderId: ID!, type: String!, name: String!, filesId: ID!): UploadFileData
   deleteFileObject(objectId: ID!): Boolean
-  getProfileUpload(mimeType: String!, size: Int!): String
-  getMarkdownImageUpload(mimeType: String!, size: Int!): String
 }
