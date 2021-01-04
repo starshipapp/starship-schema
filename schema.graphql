@@ -1,4 +1,4 @@
-# starship-schema 0.3d
+# starship-schema 0.3e
 
 # Users
 type User {
@@ -229,6 +229,13 @@ type Query {
   files(componentId: ID!, parent: String!): [FileObject]
   folders(componentId: ID!, parent: String!): [FileObject]
   fileObject(id: ID!): FileObject
+  # AWS
+  # While many of these methods *could be* included in the
+  # initial object query, because they expire it's better
+  # to fetch this information as needed
+  downloadFileObject(fileId: ID!): String
+  downloadFolderObject(folderId: ID!): [String]
+  getObjectPreview(fileId: ID!): String
 }
 
 type Mutation {
@@ -283,13 +290,7 @@ type Mutation {
   renameObject(objectId: ID!, name: String!): FileObject
   moveObject(objectId: ID!, parent: String!): FileObject
   # AWS
-  # While many of these methods *could be* included in the
-  # initial object query, because they expire it's better
-  # to fetch this information as needed
   uploadFileObject(folderId: ID!, type: String!, name: String!, filesId: String!): String
-  downloadFileObject(fileId: ID!): String
-  downloadFolderObject(folderId: ID!): [String]
-  getObjectPreview(fileId: ID!): String
   deleteFileObject(objectId: ID!): Boolean
   getProfileUpload(mimeType: String!, size: Int!): String
   getMarkdownImageUpload(mimeType: String!, size: Int!): String
