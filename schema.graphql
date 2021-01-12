@@ -1,4 +1,4 @@
-# starship-schema 0.4a
+# starship-schema 0.4c
 
 # Users
 type User {
@@ -134,6 +134,7 @@ type Forum implements Component {
   owner: User!
   updatedAt: String!
   planet: Planet!
+  stickiedPosts: [ForumPosts]
   posts(limit: Int, cursor: String, sortMethod: String): ForumPostFeed,
   tags: [String]
 }
