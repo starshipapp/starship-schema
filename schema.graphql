@@ -1,4 +1,4 @@
-# starship-schema 0.4d
+# starship-schema 0.4e
 
 # Users
 type User {
@@ -287,11 +287,11 @@ type Mutation {
   deleteForumPost(postId: ID!): Boolean
   lockForumPost(postId: ID!): ForumPost
   stickyForumPost(postId: ID!): ForumPost
-  forumPostReact(postId: ID!, emojiId: String): ForumPost
+  forumPostReact(postId: ID!, emojiId: String!): ForumPost
   insertForumReply(postId: ID!, content: String!): ForumReply
   updateForumReply(replyId: ID!, content: String!): ForumReply
   deleteForumReply(replyId: ID!): Boolean
-  forumReplyReact(replyId: ID!, id: ID!): ForumReply
+  forumReplyReact(replyId: ID!, emojiId: String!): ForumReply
   # Files
   createFolder(componentId: ID!, parent: String!, name: String!): FileObject
   completeUpload(objectId: ID!): FileObject
