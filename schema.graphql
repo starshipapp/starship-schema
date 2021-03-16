@@ -1,4 +1,4 @@
-# starship-schema 0.5
+# starship-schema 0.5a
 
 # Users
 type User {
@@ -251,7 +251,7 @@ type Mutation {
   banUser(userId: ID!): User
   resendVerificationEmail(username: String!): Boolean
   sendResetPasswordEmail(username: String!): Boolean
-  resetPassword(userId: ID!, token: String!): Boolean
+  resetPassword(userId: ID!, token: String!, password: String!): Boolean
   activateEmail(userId: ID!, token: String!): Boolean
   loginUser(username: String!, password: String!): LoginPayload!
   # Reports
