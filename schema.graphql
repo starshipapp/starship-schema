@@ -1,4 +1,4 @@
-# starship-schema 0.5a
+# starship-schema 0.5b
 
 # Users
 type User {
@@ -209,7 +209,7 @@ type Query {
   # Users
   user(id: ID!): User
   adminUser(id: ID!): User
-  adminUsersRecent(id: ID!): [User]
+  adminUsers(startNumber: Int!, count: Int!): [User]
   currentUser: User
   # Reports
   report(id: ID!): Report
