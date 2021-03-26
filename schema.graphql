@@ -1,4 +1,4 @@
-# starship-schema 0.5b
+# starship-schema 0.6
 
 # Users
 type User {
@@ -201,6 +201,11 @@ type UploadFileData {
   uploadUrl: String!
 }
 
+type UploadMarkdownImageData {
+  finalUrl: String!
+  uploadUrl: String!
+}
+
 ### -------------
 ### FUNCTIONALITY
 ### -------------
@@ -301,4 +306,6 @@ type Mutation {
   # AWS
   uploadFileObject(folderId: String!, type: String!, name: String!, filesId: ID!): UploadFileData
   deleteFileObject(objectId: ID!): Boolean
+  uploadMarkdownImage(type: String!, size: String!): UploadMarkdownImageData
+  uploadProfilePicture(type: String!, size: String!): String
 }
