@@ -306,6 +306,6 @@ type Mutation {
   # AWS
   uploadFileObject(folderId: String!, type: String!, name: String!, filesId: ID!): UploadFileData
   deleteFileObject(objectId: ID!): Boolean
-  uploadMarkdownImage(type: String!, size: String!): UploadMarkdownImageData
-  uploadProfilePicture(type: String!, size: String!): String
+  uploadMarkdownImage(type: String!, size: Int!): UploadMarkdownImageData
+  uploadProfilePicture(type: String!, size: Int!): String
 }
