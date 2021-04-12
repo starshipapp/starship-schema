@@ -1,4 +1,4 @@
-# starship-schema 0.7
+# starship-schema 0.8
 
 # Users
 type User {
@@ -10,6 +10,8 @@ type User {
   following: [Planet]
   memberOf: [Planet]
   createdAt: String!
+  usedBytes: Float!
+  capWaived: Boolean
 }
 
 # Reports
@@ -114,16 +116,18 @@ type FileComponent implements Component {
 
 type FileObject {
   id: ID!
-  path: [String!]!
+  path: [String!]
   parent: FileObject
   name: String!
-  planet: Planet!
-  owner: User!
+  planet: Planet
+  owner: User
   createdAt: String
-  component: FileComponent!
+  component: FileComponent
   type: String!
   fileType: String!
   finishedUploading: Boolean
+  shareId: String!
+  size: Float
 }
 
 # Forum
@@ -241,6 +245,9 @@ type Query {
   folders(componentId: ID!, parent: String!): [FileObject]
   fileObject(id: ID!): FileObject
   fileObjectArray(ids: [ID]!): [FileObject]!
+  getFolderReadme(id: ID!): String
+  searchForFiles(componentId: ID!, parent: String!, searchText: String!): [FileObject]
+  getSharedFile(shareId: String!): FileObject
   # AWS
   # While many of these methods *could be* included in the
   # initial object query, because they expire it's better
@@ -303,6 +310,9 @@ type Mutation {
   completeUpload(objectId: ID!): FileObject
   renameObject(objectId: ID!, name: String!): FileObject
   moveObject(objectId: ID!, parent: String!): FileObject
+  copyFile(objectId: ID!, parent: String!): FileObject
+  shareFile(objectId: ID!): FileObject
+  cancelUpload(objectId: ID!): FileObject
   # AWS
   uploadFileObject(folderId: String!, type: String!, name: String!, filesId: ID!): UploadFileData
   deleteFileObject(objectId: ID!): Boolean
