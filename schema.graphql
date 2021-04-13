@@ -51,6 +51,7 @@ type Planet {
   invites: [Invite]
   banned: [User]
   css: String
+  description: String
 }
 
 # Invites
@@ -224,6 +225,7 @@ type Query {
   report(id: ID!): Report
   allReports(startNumber: Int!, count: Int!): [Report]!
   reportsByUser(userId: ID!, startNumber: Int!, count: Int!): [Report]!
+  searchForPlanet(searchString: String!): [Planet]
   # Planets
   featuredPlanets: [Planet]
   planet(id: ID!): Planet
