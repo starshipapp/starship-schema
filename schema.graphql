@@ -283,6 +283,7 @@ type Mutation {
   applyModTools(planetId: ID!, featured: Boolean!, verified: Boolean!, partnered: Boolean!, featuredDescription: String!): Planet
   toggleBan(planetId: ID!, userId: ID!): Planet
   setCSS(planetId: ID!, css: String!): Planet
+  setDescription(planetId: ID!, description: String!): Planet
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Planet
@@ -309,7 +310,6 @@ type Mutation {
   forumReplyReact(replyId: ID!, emojiId: String!): ForumReply
   # Files
   createFolder(componentId: ID!, parent: String!, name: String!): FileObject
-  completeUpload(objectId: ID!): FileObject
   renameObject(objectId: ID!, name: String!): FileObject
   moveObject(objectId: ID!, parent: String!): FileObject
   copyFile(objectId: ID!, parent: String!): FileObject
@@ -320,4 +320,5 @@ type Mutation {
   deleteFileObject(objectId: ID!): Boolean
   uploadMarkdownImage(type: String!, size: Int!): UploadMarkdownImageData
   uploadProfilePicture(type: String!, size: Int!): String
+  completeUpload(objectId: ID!): FileObject
 }
