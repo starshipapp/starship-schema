@@ -247,9 +247,9 @@ type Query {
   folders(componentId: ID!, parent: String!): [FileObject]
   fileObject(id: ID!): FileObject
   fileObjectArray(ids: [ID]!): [FileObject]!
-  getFolderReadme(id: ID!): String
+  folderReadme(id: ID!): String
   searchForFiles(componentId: ID!, parent: String!, searchText: String!): [FileObject]
-  getSharedFile(shareId: String!): FileObject
+  sharedFile(shareId: String!): FileObject
   # AWS
   # While many of these methods *could be* included in the
   # initial object query, because they expire it's better
