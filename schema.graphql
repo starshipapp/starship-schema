@@ -268,7 +268,7 @@ type Mutation {
   resetPassword(userId: ID!, token: String, password: String!, totpToken: String): Boolean
   activateEmail(userId: ID!, token: String!): Boolean
   loginUser(username: String!, password: String!, totpToken: String): LoginPayload!
-  enableTotp(): String
+  enableTotp: String
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
