@@ -265,9 +265,10 @@ type Mutation {
   banUser(userId: ID!): User
   resendVerificationEmail(username: String!): Boolean
   sendResetPasswordEmail(username: String!): Boolean
-  resetPassword(userId: ID!, token: String!, password: String!): Boolean
+  resetPassword(userId: ID!, token: String, password: String!, totpToken: String): Boolean
   activateEmail(userId: ID!, token: String!): Boolean
-  loginUser(username: String!, password: String!): LoginPayload!
+  loginUser(username: String!, password: String!, totpToken: String): LoginPayload!
+  enableTotp(): String
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
@@ -284,6 +285,7 @@ type Mutation {
   toggleBan(planetId: ID!, userId: ID!): Planet
   setCSS(planetId: ID!, css: String!): Planet
   setDescription(planetId: ID!, description: String!): Planet
+  deletePlanet(planetId: ID!): Boolean
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Planet
