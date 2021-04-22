@@ -313,13 +313,13 @@ type Mutation {
   # Files
   createFolder(componentId: ID!, parent: String!, name: String!): FileObject
   renameObject(objectId: ID!, name: String!): FileObject
-  moveObject(objectId: ID!, parent: String!): FileObject
-  copyFile(objectId: ID!, parent: String!): FileObject
+  moveObject(objectIds: [ID]!, parent: String!): [FileObject]
+  copyFile(objectIds: [ID]!, parent: String!): [FileObject]
   shareFile(objectId: ID!): FileObject
   cancelUpload(objectId: ID!): FileObject
   # AWS
   uploadFileObject(folderId: String!, type: String!, name: String!, filesId: ID!): UploadFileData
-  deleteFileObject(objectId: ID!): Boolean
+  deleteFileObject(objectIds: [ID]!): Boolean
   uploadMarkdownImage(type: String!, size: Int!): UploadMarkdownImageData
   uploadProfilePicture(type: String!, size: Int!): String
   completeUpload(objectId: ID!): FileObject
