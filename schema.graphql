@@ -11,7 +11,8 @@ type User {
   memberOf: [Planet]
   createdAt: String!
   usedBytes: Float!
-  capWaived: Boolean
+  capWaived: Boolean,
+  tfaEnabled: Boolean
 }
 
 # Reports
@@ -199,6 +200,7 @@ type ForumReplyFeed {
 
 type LoginPayload {
   token: String!
+  expectingTFA: Boolean!
 }
 
 type UploadFileData {
@@ -265,10 +267,13 @@ type Mutation {
   banUser(userId: ID!): User
   resendVerificationEmail(username: String!): Boolean
   sendResetPasswordEmail(username: String!): Boolean
-  resetPassword(userId: ID!, token: String, password: String!, totpToken: String): Boolean
+  resetPassword(userId: ID!, token: String, password: String!): Boolean
   activateEmail(userId: ID!, token: String!): Boolean
-  loginUser(username: String!, password: String!, totpToken: String): LoginPayload!
-  enableTotp: String
+  loginUser(username: String!, password: String!): LoginPayload!
+  finalizeAuthorization(loginToken: String!, totpToken: Int!): LoginPayload!
+  generateTOTPSecret: String
+  confirmTFA(token: Int): [Int]
+  disableTFA(token: Int): Boolean
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
