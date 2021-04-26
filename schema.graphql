@@ -272,8 +272,8 @@ type Mutation {
   loginUser(username: String!, password: String!): LoginPayload!
   finalizeAuthorization(loginToken: String!, totpToken: Int!): LoginPayload!
   generateTOTPSecret: String
-  confirmTFA(token: Int): [Int]
-  disableTFA(token: Int): Boolean
+  confirmTFA(token: Int!): [Int]
+  disableTFA(token: Int!): Boolean
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
