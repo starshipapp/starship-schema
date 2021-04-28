@@ -249,7 +249,6 @@ type Query {
   folders(componentId: ID!, parent: String!): [FileObject]
   fileObject(id: ID!): FileObject
   fileObjectArray(ids: [ID]!): [FileObject]!
-  folderReadme(id: ID!): String
   searchForFiles(componentId: ID!, parent: String!, searchText: String!): [FileObject]
   sharedFile(shareId: String!): FileObject
   # AWS
