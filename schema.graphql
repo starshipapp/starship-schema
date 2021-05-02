@@ -128,7 +128,6 @@ type FileObject {
   type: String!
   fileType: String!
   finishedUploading: Boolean
-  shareId: String!
   size: Float
 }
 
