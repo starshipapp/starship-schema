@@ -1,4 +1,4 @@
-# starship-schema 0.7
+# starship-schema 0.8
 
 # Users
 type User {
@@ -10,6 +10,9 @@ type User {
   following: [Planet]
   memberOf: [Planet]
   createdAt: String!
+  usedBytes: Float!
+  capWaived: Boolean,
+  tfaEnabled: Boolean
 }
 
 # Reports
@@ -49,6 +52,7 @@ type Planet {
   invites: [Invite]
   banned: [User]
   css: String
+  description: String
 }
 
 # Invites
@@ -114,16 +118,18 @@ type FileComponent implements Component {
 
 type FileObject {
   id: ID!
-  path: [String!]!
+  path: [String!]
   parent: FileObject
   name: String!
-  planet: Planet!
-  owner: User!
+  planet: Planet
+  owner: User
   createdAt: String
-  component: FileComponent!
+  component: FileComponent
   type: String!
   fileType: String!
   finishedUploading: Boolean
+  shareId: String!
+  size: Float
 }
 
 # Forum
@@ -194,6 +200,7 @@ type ForumReplyFeed {
 
 type LoginPayload {
   token: String!
+  expectingTFA: Boolean!
 }
 
 type UploadFileData {
@@ -221,6 +228,7 @@ type Query {
   allReports(startNumber: Int!, count: Int!): [Report]!
   reportsByUser(userId: ID!, startNumber: Int!, count: Int!): [Report]!
   # Planets
+  searchForPlanets(searchText: String!): [Planet]
   featuredPlanets: [Planet]
   planet(id: ID!): Planet
   adminPlanets(startNumber: Int!, count: Int!): [Planet]
@@ -241,6 +249,7 @@ type Query {
   folders(componentId: ID!, parent: String!): [FileObject]
   fileObject(id: ID!): FileObject
   fileObjectArray(ids: [ID]!): [FileObject]!
+  searchForFiles(componentId: ID!, parent: String!, searchText: String!): [FileObject]
   # AWS
   # While many of these methods *could be* included in the
   # initial object query, because they expire it's better
@@ -256,9 +265,13 @@ type Mutation {
   banUser(userId: ID!): User
   resendVerificationEmail(username: String!): Boolean
   sendResetPasswordEmail(username: String!): Boolean
-  resetPassword(userId: ID!, token: String!, password: String!): Boolean
+  resetPassword(userId: ID!, token: String, password: String!): Boolean
   activateEmail(userId: ID!, token: String!): Boolean
   loginUser(username: String!, password: String!): LoginPayload!
+  finalizeAuthorization(loginToken: String!, totpToken: Int!): LoginPayload!
+  generateTOTPSecret: String
+  confirmTFA(token: Int!): [Int]
+  disableTFA(token: Int!): Boolean
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
@@ -274,6 +287,8 @@ type Mutation {
   applyModTools(planetId: ID!, featured: Boolean!, verified: Boolean!, partnered: Boolean!, featuredDescription: String!): Planet
   toggleBan(planetId: ID!, userId: ID!): Planet
   setCSS(planetId: ID!, css: String!): Planet
+  setDescription(planetId: ID!, description: String!): Planet
+  deletePlanet(planetId: ID!): Boolean
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Planet
@@ -300,12 +315,14 @@ type Mutation {
   forumReplyReact(replyId: ID!, emojiId: String!): ForumReply
   # Files
   createFolder(componentId: ID!, parent: String!, name: String!): FileObject
-  completeUpload(objectId: ID!): FileObject
   renameObject(objectId: ID!, name: String!): FileObject
-  moveObject(objectId: ID!, parent: String!): FileObject
+  moveObject(objectIds: [ID]!, parent: String!): [FileObject]
+  cancelUpload(objectId: ID!): Boolean
   # AWS
   uploadFileObject(folderId: String!, type: String!, name: String!, filesId: ID!): UploadFileData
-  deleteFileObject(objectId: ID!): Boolean
+  deleteFileObject(objectIds: [ID]!): Boolean
   uploadMarkdownImage(type: String!, size: Int!): UploadMarkdownImageData
   uploadProfilePicture(type: String!, size: Int!): String
+  completeUpload(objectId: ID!): FileObject
+  copyFile(objectIds: [ID]!, parent: String!): [FileObject]
 }
