@@ -227,8 +227,8 @@ type Query {
   report(id: ID!): Report
   allReports(startNumber: Int!, count: Int!): [Report]!
   reportsByUser(userId: ID!, startNumber: Int!, count: Int!): [Report]!
-  searchForPlanets(searchText: String!): [Planet]
   # Planets
+  searchForPlanets(searchText: String!): [Planet]
   featuredPlanets: [Planet]
   planet(id: ID!): Planet
   adminPlanets(startNumber: Int!, count: Int!): [Planet]
