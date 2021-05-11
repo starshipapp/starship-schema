@@ -1,4 +1,4 @@
-# starship-schema 0.8
+# starship-schema 0.9-wip
 
 # Users
 type User {
@@ -11,8 +11,12 @@ type User {
   memberOf: [Planet]
   createdAt: String!
   usedBytes: Float!
-  capWaived: Boolean,
+  capWaived: Boolean
   tfaEnabled: Boolean
+  membershipLevel: Int
+  expiryDate: String!
+  blockedUsers: [User]
+  customEmojis: [CustomEmoji]
 }
 
 # Reports
@@ -53,6 +57,7 @@ type Planet {
   banned: [User]
   css: String
   description: String
+  customEmojis: [CustomEmoji]
 }
 
 # Invites
@@ -66,18 +71,9 @@ type Invite {
 ### ----------
 ### COMPONENTS
 ### ----------
-
-interface Component {
-  id: ID!
-  createdAt: String!
-  owner: User!
-  updatedAt: String!
-  planet: Planet!
-}
-
 # Page
 
-type Page implements Component {
+type Page {
   id: ID!
   createdAt: String!
   owner: User!
@@ -88,11 +84,10 @@ type Page implements Component {
 
 # Wiki (currently impl. as Page Group)
 
-type Wiki implements Component {
+type Wiki {
   id: ID!
   createdAt: String!
   owner: User!
-  updatedAt: String!
   planet: Planet!
   pages: [WikiPage]
 }
@@ -108,11 +103,10 @@ type WikiPage {
 
 # Files
 
-type FileComponent implements Component {
+type FileComponent {
   id: ID!
   createdAt: String!
   owner: User!
-  updatedAt: String!
   planet: Planet!
 }
 
@@ -128,16 +122,16 @@ type FileObject {
   type: String!
   fileType: String!
   finishedUploading: Boolean
+  shareId: String!
   size: Float
 }
 
 # Forum
 
-type Forum implements Component {
+type Forum {
   id: ID!
   createdAt: String!
   owner: User!
-  updatedAt: String!
   planet: Planet!
   stickiedPosts: [ForumPost]
   posts(limit: Int, cursor: String, sortMethod: String, tag: String): ForumPostFeed,
@@ -179,18 +173,102 @@ type ForumReply {
   updatedAt: String!
 }
 
+# Blogs
+
+type Blog {
+  id: ID!
+  createdAt: String!
+  owner: User!
+  planet: Planet!
+  posts(limit: Int, cursor: String): BlogPostFeed
+}
+
+type BlogPost {
+  id: ID!
+  createdAt: String!
+  owner: User!
+  planet: Planet!
+  content: String!
+  component: Blog!
+  name: String!
+  comments: [BlogComment]
+}
+
+type BlogComment {
+  id: ID!
+  createdAt: String!
+  owner: User!
+  blog: Blog!
+  post: BlogPost!
+  planet: Planet!
+  content: String!
+}
+
+# Direct Messages
+
+type DirectMessage {
+  id: ID!,
+  owner: User!,
+  recipient: User!,
+  createdAt: String!,
+  content: String!,
+  name: String!,
+  replies(limit: Int, cursor: String): DirectMessageReplyFeed
+}
+
+type DirectMessageReply {
+  id: ID!
+  owner: User!
+  createdAt: String!
+  content: String!
+}
+
+# Misc. Types
+
+type Notification {
+  id: ID!
+  user: User!
+  createdAt: String!
+  text: String!
+  icon: String!
+}
+
+type CustomEmoji {
+  id: ID!
+  owner: User!
+  planet: Planet
+  user: User
+  name: String!
+  url: String!
+}
+
 ### ----------
 ### FEED TYPES
 ### ----------
 
 type ForumPostFeed {
-  cursor: String!,
+  cursor: String!
   forumPosts: [ForumPost]
 }
 
 type ForumReplyFeed {
-  cursor: String!,
+  cursor: String!
   forumReplies: [ForumReply]
+}
+
+type DirectMessageFeed {
+  cursor: String!
+  messages: [DirectMessage]
+}
+
+type DirectMessageReplyFeed {
+  cursor: String!
+  messageReplies: [DirectMessageReply]
+}
+
+type BlogPostFeed {
+  cursor: String!
+  messageReplies: [BlogPost]
 }
 
 ### -----------------
@@ -226,8 +304,8 @@ type Query {
   report(id: ID!): Report
   allReports(startNumber: Int!, count: Int!): [Report]!
   reportsByUser(userId: ID!, startNumber: Int!, count: Int!): [Report]!
-  # Planets
   searchForPlanets(searchText: String!): [Planet]
+  # Planets
   featuredPlanets: [Planet]
   planet(id: ID!): Planet
   adminPlanets(startNumber: Int!, count: Int!): [Planet]
@@ -256,6 +334,19 @@ type Query {
   downloadFileObject(fileId: ID!): String
   downloadFolderObject(folderId: ID!): [String]
   getObjectPreview(fileId: ID!): String
+  # Direct Messages
+  directMessages: DirectMessageFeed
+  directMessage(id: ID!): DirectMessage
+  directMessageReply(id: ID!): DirectMessageReply
+  # Notifications
+  notifications: [Notification]
+  notifcation(id: ID!): Notification
+  # Custom Emojis
+  customEmoji(id: ID!): CustomEmoji
+  # Blogs
+  blog(id: ID!): Blog
+  blogPost(id: ID!): BlogPost
+  blogComment(id: ID!): BlogComment
 }
 
 type Mutation {
@@ -271,6 +362,8 @@ type Mutation {
   generateTOTPSecret: String
   confirmTFA(token: Int!): [Int]
   disableTFA(token: Int!): Boolean
+  blockUser(id: ID!): User
+  uploadUserCustomEmoji(name: String!): User
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
@@ -288,6 +381,7 @@ type Mutation {
   setCSS(planetId: ID!, css: String!): Planet
   setDescription(planetId: ID!, description: String!): Planet
   deletePlanet(planetId: ID!): Boolean
+  uploadPlanetCustomEmoji(planetId: ID!, name: String!): Planet
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Planet
@@ -324,4 +418,20 @@ type Mutation {
   uploadProfilePicture(type: String!, size: Int!): String
   completeUpload(objectId: ID!): FileObject
   copyFile(objectIds: [ID]!, parent: String!): [FileObject]
+  # Notifications
+  clearNotification(notificationId: ID!): Boolean
+  clearAllNotifications: Boolean
+  # Direct Messages
+  sendDirectMessage(recipient: ID!, content: String!, name: String!): DirectMessage
+  updateDirectMessage(messageId: ID!, content: String!): DirectMessage
+  replyToDirectMessage(messageId: ID!, content: String!): DirectMessageReply
+  updateDirectMessageReply(replyId: ID!, content: String!): DirectMessageReply
+  # Blogs
+  insertBlogPost(blogId: ID!, content: String!, name: String!): BlogPost
+  updateBlogPost(postId: ID!, content: String!): BlogPost
+  renameBlogPost(postId: ID!, name: String!): BlogPost
+  remobeBlogPost(postId: ID!): Boolean
+  insertBlogComment(postId: ID!, content: String!): BlogComment
+  editBlogComment(commentId: ID!, content: String!): BlogComment
+  deleteBlogComment(commentId: ID!): Boolean
 }
