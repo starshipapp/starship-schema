@@ -349,6 +349,10 @@ type Query {
   blogComment(id: ID!): BlogComment
 }
 
+type Subscription {
+  notificationRecieved: Notification
+}
+
 type Mutation {
   # Users
   insertUser(email: String!, password: String!, username: String!, recaptcha: String!): User
