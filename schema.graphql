@@ -340,7 +340,7 @@ type Query {
   directMessageReply(id: ID!): DirectMessageReply
   # Notifications
   notifications: [Notification]
-  notifcation(id: ID!): Notification
+  notification(id: ID!): Notification
   # Custom Emojis
   customEmoji(id: ID!): CustomEmoji
   # Blogs
