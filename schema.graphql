@@ -231,6 +231,7 @@ type Notification {
   createdAt: String!
   text: String!
   icon: String!
+  isRead: Boolean!
 }
 
 type CustomEmoji {
@@ -425,6 +426,7 @@ type Mutation {
   # Notifications
   clearNotification(notificationId: ID!): Boolean
   clearAllNotifications: Boolean
+  markAllRead: Boolean
   # Direct Messages
   sendDirectMessage(recipient: ID!, content: String!, name: String!): DirectMessage
   updateDirectMessage(messageId: ID!, content: String!): DirectMessage
