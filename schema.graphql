@@ -173,37 +173,6 @@ type ForumReply {
   updatedAt: String!
 }
 
-# Blogs
-
-type Blog {
-  id: ID!
-  createdAt: String!
-  owner: User!
-  planet: Planet!
-  posts(limit: Int, cursor: String): BlogPostFeed
-}
-
-type BlogPost {
-  id: ID!
-  createdAt: String!
-  owner: User!
-  planet: Planet!
-  content: String!
-  component: Blog!
-  name: String!
-  comments: [BlogComment]
-}
-
-type BlogComment {
-  id: ID!
-  createdAt: String!
-  owner: User!
-  blog: Blog!
-  post: BlogPost!
-  planet: Planet!
-  content: String!
-}
-
 # Direct Messages
 
 type DirectMessage {
@@ -265,11 +234,6 @@ type DirectMessageFeed {
 type DirectMessageReplyFeed {
   cursor: String!
   messageReplies: [DirectMessageReply]
-}
-
-type BlogPostFeed {
-  cursor: String!
-  messageReplies: [BlogPost]
 }
 
 ### -----------------
@@ -344,10 +308,6 @@ type Query {
   notification(id: ID!): Notification
   # Custom Emojis
   customEmoji(id: ID!): CustomEmoji
-  # Blogs
-  blog(id: ID!): Blog
-  blogPost(id: ID!): BlogPost
-  blogComment(id: ID!): BlogComment
 }
 
 type Subscription {
@@ -432,12 +392,4 @@ type Mutation {
   updateDirectMessage(messageId: ID!, content: String!): DirectMessage
   replyToDirectMessage(messageId: ID!, content: String!): DirectMessageReply
   updateDirectMessageReply(replyId: ID!, content: String!): DirectMessageReply
-  # Blogs
-  insertBlogPost(blogId: ID!, content: String!, name: String!): BlogPost
-  updateBlogPost(postId: ID!, content: String!): BlogPost
-  renameBlogPost(postId: ID!, name: String!): BlogPost
-  remobeBlogPost(postId: ID!): Boolean
-  insertBlogComment(postId: ID!, content: String!): BlogComment
-  editBlogComment(commentId: ID!, content: String!): BlogComment
-  deleteBlogComment(commentId: ID!): Boolean
 }
