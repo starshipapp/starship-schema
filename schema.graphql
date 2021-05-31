@@ -6,6 +6,8 @@ type User {
   username: String!
   admin: Boolean
   profilePicture: String
+  profileBanner: String
+  profileBio: String
   banned: Boolean
   following: [Planet]
   memberOf: [Planet]
@@ -13,8 +15,6 @@ type User {
   usedBytes: Float!
   capWaived: Boolean
   tfaEnabled: Boolean
-  membershipLevel: Int
-  expiryDate: String!
   blockedUsers: [User]
   customEmojis: [CustomEmoji]
 }
@@ -329,6 +329,7 @@ type Mutation {
   disableTFA(token: Int!): Boolean
   blockUser(id: ID!): User
   uploadUserCustomEmoji(name: String!): User
+  updateProfileBio(bio: String!): User
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
   solveReport(reportId: ID!): Report
@@ -356,13 +357,7 @@ type Mutation {
   # Wikis
   insertWikiPage(wikiId: ID!, content: String!, name: String!): WikiPage
   updateWikiPage(pageId: ID!, newContent: String!): WikiPage
-  removeWikiPage(pageId: ID!): Wiki
-  renameWikiPage(pageId: ID!, newName: String!): WikiPage
-  # Forums
-  createForumTag(forumId: ID!, tag: String!): Forum
-  removeForumTag(forumId: ID!, tag: String!): Forum
-  insertForumPost(forumId: ID!, name: String!, content: String!, tag: String): ForumPost
-  updateForumPost(postId: ID!, content: String!): ForumPost
+  removeWikiPage(pageId:PictureID!, content: String!): ForumPost
   deleteForumPost(postId: ID!): Boolean
   lockForumPost(postId: ID!): ForumPost
   stickyForumPost(postId: ID!): ForumPost
@@ -381,6 +376,7 @@ type Mutation {
   deleteFileObject(objectIds: [ID]!): Boolean
   uploadMarkdownImage(type: String!, size: Int!): UploadMarkdownImageData
   uploadProfilePicture(type: String!, size: Int!): String
+  uploadProfileBanner(type: String!, size: Int!): String
   completeUpload(objectId: ID!): FileObject
   copyFile(objectIds: [ID]!, parent: String!): [FileObject]
   # Notifications
