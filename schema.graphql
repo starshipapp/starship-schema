@@ -173,25 +173,6 @@ type ForumReply {
   updatedAt: String!
 }
 
-# Direct Messages
-
-type DirectMessage {
-  id: ID!,
-  owner: User!,
-  recipient: User!,
-  createdAt: String!,
-  content: String!,
-  name: String!,
-  replies(limit: Int, cursor: String): DirectMessageReplyFeed
-}
-
-type DirectMessageReply {
-  id: ID!
-  owner: User!
-  createdAt: String!
-  content: String!
-}
-
 # Misc. Types
 
 type Notification {
@@ -224,16 +205,6 @@ type ForumPostFeed {
 type ForumReplyFeed {
   cursor: String!
   forumReplies: [ForumReply]
-}
-
-type DirectMessageFeed {
-  cursor: String!
-  messages: [DirectMessage]
-}
-
-type DirectMessageReplyFeed {
-  cursor: String!
-  messageReplies: [DirectMessageReply]
 }
 
 ### -----------------
@@ -383,9 +354,4 @@ type Mutation {
   clearNotification(notificationId: ID!): Boolean
   clearAllNotifications: Boolean
   markAllRead: Boolean
-  # Direct Messages
-  sendDirectMessage(recipient: ID!, content: String!, name: String!): DirectMessage
-  updateDirectMessage(messageId: ID!, content: String!): DirectMessage
-  replyToDirectMessage(messageId: ID!, content: String!): DirectMessageReply
-  updateDirectMessageReply(replyId: ID!, content: String!): DirectMessageReply
 }
