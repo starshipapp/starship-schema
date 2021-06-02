@@ -270,10 +270,6 @@ type Query {
   downloadFileObject(fileId: ID!): String
   downloadFolderObject(folderId: ID!): [String]
   getObjectPreview(fileId: ID!): String
-  # Direct Messages
-  directMessages: DirectMessageFeed
-  directMessage(id: ID!): DirectMessage
-  directMessageReply(id: ID!): DirectMessageReply
   # Notifications
   notifications: [Notification]
   notification(id: ID!): Notification
@@ -328,7 +324,13 @@ type Mutation {
   # Wikis
   insertWikiPage(wikiId: ID!, content: String!, name: String!): WikiPage
   updateWikiPage(pageId: ID!, newContent: String!): WikiPage
-  removeWikiPage(pageId:PictureID!, content: String!): ForumPost
+  removeWikiPage(pageId: ID!): Wiki
+  renameWikiPage(pageId: ID!, newName: String!): WikiPage
+  # Forums
+  createForumTag(forumId: ID!, tag: String!): Forum
+  removeForumTag(forumId: ID!, tag: String!): Forum
+  insertForumPost(forumId: ID!, name: String!, content: String!, tag: String): ForumPost
+  updateForumPost(postId: ID!, content: String!): ForumPost
   deleteForumPost(postId: ID!): Boolean
   lockForumPost(postId: ID!): ForumPost
   stickyForumPost(postId: ID!): ForumPost
