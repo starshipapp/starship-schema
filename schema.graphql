@@ -17,6 +17,7 @@ type User {
   tfaEnabled: Boolean
   blockedUsers: [User]
   customEmojis: [CustomEmoji]
+  online: Boolean
 }
 
 # Reports
