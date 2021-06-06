@@ -189,9 +189,26 @@ type CustomEmoji {
   id: ID!
   owner: User!
   planet: Planet
-  user: User
+  user: User!
   name: String!
   url: String!
+}
+
+type SysInfo {
+  serverName: String!
+  version: String!
+  schemaVersion: String!,
+  supportedFeatures: [String]!,
+  supportedComponents: [String]!,
+  clientFlags: [String]!,
+  paths: SysInfoPaths
+}
+
+type SysInfoPaths {
+  emojiURL: String
+  pfpURL: String
+  bannerURL: String
+  graphQLEndpoint: String!
 }
 
 ### ----------
@@ -276,6 +293,8 @@ type Query {
   notification(id: ID!): Notification
   # Custom Emojis
   customEmoji(id: ID!): CustomEmoji
+  # System Info 
+  sysInfo: SysInfo
 }
 
 type Subscription {
@@ -296,7 +315,6 @@ type Mutation {
   confirmTFA(token: Int!): [Int]
   disableTFA(token: Int!): Boolean
   blockUser(id: ID!): User
-  uploadUserCustomEmoji(name: String!): User
   updateProfileBio(bio: String!): User
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
@@ -315,7 +333,6 @@ type Mutation {
   setCSS(planetId: ID!, css: String!): Planet
   setDescription(planetId: ID!, description: String!): Planet
   deletePlanet(planetId: ID!): Boolean
-  uploadPlanetCustomEmoji(planetId: ID!, name: String!): Planet
   # Invites
   insertInvite(planetId: ID!): Invite
   useInvite(inviteId: ID!): Planet
@@ -357,4 +374,7 @@ type Mutation {
   clearNotification(notificationId: ID!): Boolean
   clearAllNotifications: Boolean
   markAllRead: Boolean
+  # Custom Emojis
+  uploadCustomEmoji(name: String!, planetId: ID): CustomEmoji
+  deleteCustomEmoji(emojiId: ID!): Boolean
 }
