@@ -370,7 +370,7 @@ type Mutation {
   uploadProfileBanner(type: String!, size: Int!): String
   completeUpload(objectId: ID!): FileObject
   copyFile(objectIds: [ID]!, parent: String!): [FileObject]
-  uploadCustomEmoji(name: String!, planetId: ID): String
+  uploadCustomEmoji(name: String!, size: Int!, type: String! planetId: ID): String
   # Notifications
   clearNotification(notificationId: ID!): Boolean
   clearAllNotifications: Boolean
