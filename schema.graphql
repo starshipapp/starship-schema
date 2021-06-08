@@ -314,7 +314,7 @@ type Mutation {
   generateTOTPSecret: String
   confirmTFA(token: Int!): [Int]
   disableTFA(token: Int!): Boolean
-  blockUser(id: ID!): User
+  toggleBlockUser(id: ID!): User
   updateProfileBio(bio: String!): User
   # Reports
   insertReport(objectType: Int!, objectId: ID!, reportType: Int!, details: String!, userId: ID!): Report
