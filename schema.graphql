@@ -159,6 +159,7 @@ type ForumPost {
   createdAt: String!
   updatedAt: String!
   replies(limit: Int, cursor: String): ForumReplyFeed
+  mentions: [User]!
 }
 
 type ForumReply {
@@ -172,6 +173,7 @@ type ForumReply {
   stickied: Boolean!
   createdAt: String!
   updatedAt: String!
+  mentions: [User]!
 }
 
 # Misc. Types
