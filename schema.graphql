@@ -60,6 +60,8 @@ type Planet {
   css: String
   description: String
   customEmojis: [CustomEmoji]
+  unread: Boolean
+  mentioned: Boolean
 }
 
 # Invites
@@ -140,11 +142,6 @@ type Forum {
   tags: [String]
 }
 
-type ForumReaction {
-  emoji: String!
-  reactors: [String!]!
-}
-
 type ForumPost {
   id: ID!
   name: String!
@@ -153,7 +150,7 @@ type ForumPost {
   owner: User!
   planet: Planet!
   tags: [String]!
-  reactions: [ForumReaction]!
+  reactions: [Reaction]!
   replyCount: Int!
   stickied: Boolean!
   locked: Boolean
@@ -170,11 +167,53 @@ type ForumReply {
   content: String!
   owner: User!
   planet: Planet!
-  reactions: [ForumReaction]!
+  reactions: [Reaction]!
   stickied: Boolean!
   createdAt: String!
   updatedAt: String!
   mentions: [User]!
+}
+
+# Chat and Direct Messages
+
+type Chat {
+  id: ID!
+  createdAt: String!
+  owner: User!
+  planet: Planet!
+  channels: [Channel]
+  unread: Boolean
+  mentioned: Boolean
+}
+
+type Channel {
+  id: ID!
+  name: String!
+  type: Int!
+  topic: String!
+  createdAt: String!
+  messages: (limit: Int, cursor: String): MessageFeed
+  pinnedMessages: (limit: Int, cursor: String): MessageFeed
+  component: Chat
+  planet: Planet
+  owner: User!
+  users: [User]
+  unread: Boolean
+  mentioned: Boolean
+  lastRead: String
+}
+
+type Message {
+  id: ID!
+  createdAt: String!
+  content: String!
+  pinned: Boolean!
+  edited: Boolean!
+  channel: Channel!
+  owner: User!
+  mentions: [User]!
+  reactions: [Reaction]!
+  parent: Message
 }
 
 # Misc. Types
@@ -212,6 +251,11 @@ type SysInfoPaths {
   pfpURL: String
   bannerURL: String
   graphQLEndpoint: String!
+}
+
+type Reaction {
+  emoji: String!
+  reactors: [String!]!
 }
 
 ### ----------
@@ -298,10 +342,15 @@ type Query {
   customEmoji(id: ID!): CustomEmoji
   # System Info 
   sysInfo: SysInfo
+  # Chat
+  chat(id: ID!): Chat
+  channel(id: ID!): Channel
+  message(id: ID!): Message
 }
 
 type Subscription {
   notificationRecieved: Notification
+  messageRecieved(channelId: ID!): Message
 }
 
 type Mutation {
@@ -381,4 +430,15 @@ type Mutation {
   markAllRead: Boolean
   # Custom Emojis
   deleteCustomEmoji(emojiId: ID!): Boolean
+  # Chat
+  createChannel(chatId: ID!, name: String!): Channel
+  renameChannel(channelId: ID!, name: String!): Channel
+  setChannelTopic(channelId: ID!, topic: String!): Channel
+  deleteChannel(channelId: ID!): Boolean
+  createDirectMessage(userId: ID!): Boolean
+  sendMessage(channelId: ID!, content: String!, replyTo: ID): Message
+  editMessage(messageId: ID!, content: String!): Message
+  reactToMessage(messageId: ID!, emojiId: String!): Message
+  pinMessage(messageId: ID!): Message
+  deleteMessage(messageId: ID!): Boolean 
 }
