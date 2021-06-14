@@ -192,8 +192,8 @@ type Channel {
   type: Int!
   topic: String!
   createdAt: String!
-  messages: (limit: Int, cursor: String): MessageFeed
-  pinnedMessages: (limit: Int, cursor: String): MessageFeed
+  messages(limit: Int, cursor: String): MessageFeed
+  pinnedMessages(limit: Int, cursor: String): MessageFeed
   component: Chat
   planet: Planet
   owner: User!
@@ -278,6 +278,11 @@ type ForumPostFeed {
 type ForumReplyFeed {
   cursor: String!
   forumReplies: [ForumReply]
+}
+
+type MessageFeed {
+  cursor: String!
+  messages: [Message]
 }
 
 ### -----------------
