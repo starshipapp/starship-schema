@@ -214,6 +214,7 @@ type Message {
   mentions: [User]!
   reactions: [Reaction]!
   parent: Message
+  attachments: [Attachment]
 }
 
 # Misc. Types
@@ -256,6 +257,13 @@ type SysInfoPaths {
 type Reaction {
   emoji: String!
   reactors: [String!]!
+}
+
+type Attachment {
+  id: ID!
+  name: String!
+  type: String!
+  url: String!
 }
 
 ### ----------
@@ -424,6 +432,7 @@ type Mutation {
   completeUpload(objectId: ID!): FileObject
   copyFile(objectIds: [ID]!, parent: String!): [FileObject]
   uploadCustomEmoji(name: String!, size: Int!, type: String!, planetId: ID): String
+  uploadAttachment(type: String!, size: Int!, name: String!): UploadFileData
   # Notifications
   clearNotification(notificationId: ID!): Boolean
   clearAllNotifications: Boolean
@@ -436,7 +445,7 @@ type Mutation {
   setChannelTopic(channelId: ID!, topic: String!): Channel
   deleteChannel(channelId: ID!): Boolean
   createDirectMessage(userId: ID!): Boolean
-  sendMessage(channelId: ID!, content: String!, replyTo: ID): Message
+  sendMessage(channelId: ID!, content: String!, attachments: [ID] replyTo: ID): Message
   editMessage(messageId: ID!, content: String!): Message
   reactToMessage(messageId: ID!, emojiId: String!): Message
   pinMessage(messageId: ID!): Message
