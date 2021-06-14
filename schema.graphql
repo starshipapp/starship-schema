@@ -285,6 +285,11 @@ type MessageFeed {
   messages: [Message]
 }
 
+type ChannelFeed {
+  cursor: String!
+  channels: [Channel]
+}
+
 ### -----------------
 ### PURE RETURN TYPES
 ### -----------------
@@ -359,6 +364,7 @@ type Query {
   chat(id: ID!): Chat
   channel(id: ID!): Channel
   message(id: ID!): Message
+  directMessages(limit: Int, cursor: String): ChannelFeed
 }
 
 type Subscription {
