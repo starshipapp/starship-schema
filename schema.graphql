@@ -369,7 +369,9 @@ type Query {
 
 type Subscription {
   notificationRecieved: Notification
-  messageRecieved(channelId: ID!): Message
+  messageSent(channelId: ID!): Message
+  messageUpdated(channelId: ID!): Message
+  messageRemoved(channelId: ID!): Message
 }
 
 type Mutation {
