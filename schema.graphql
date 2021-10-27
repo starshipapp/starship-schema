@@ -436,7 +436,7 @@ type Mutation {
   renameObject(objectId: ID!, name: String!): FileObject
   moveObject(objectIds: [ID]!, parent: String!): [FileObject]
   cancelUpload(objectId: ID!): Boolean
-  createMultiObjectDownloadToken(objectIds: [ID]!, zipName: String!): String
+  createMultiObjectDownloadTicket(objectIds: [ID]!, zipName: String!): String
   # AWS
   uploadFileObject(folderId: String!, type: String!, name: String!, filesId: ID!): UploadFileData
   deleteFileObject(objectIds: [ID]!): Boolean
